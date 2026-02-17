@@ -12,11 +12,45 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Admin
+        \App\Models\User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@spms.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'admin',
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Student
+        $student = \App\Models\User::create([
+            'name' => 'John Student',
+            'email' => 'student@spms.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'student',
+        ]);
+
+        // Supervisor
+        $supervisor = \App\Models\User::create([
+            'name' => 'Dr. Supervisor',
+            'email' => 'supervisor@spms.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'supervisor',
+        ]);
+
+        // Evaluator
+        \App\Models\User::create([
+            'name' => 'Prof. Evaluator',
+            'email' => 'evaluator@spms.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'evaluator',
+        ]);
+
+        // Sample Project
+        \App\Models\Project::create([
+            'student_id' => $student->id,
+            'supervisor_id' => $supervisor->id,
+            'title' => 'AI-Based Student Management System',
+            'description' => 'A comprehensive system to manage student projects using Artificial Intelligence.',
+            'status' => 'in_progress',
+        ]);
     }
 }
