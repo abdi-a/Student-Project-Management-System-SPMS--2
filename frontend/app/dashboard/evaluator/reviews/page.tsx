@@ -47,9 +47,12 @@ export default function EvaluatorReviews() {
                                     </div>
                                 </div>
                                 <div className="ml-5 flex-shrink-0">
-                                    <button className="bg-indigo-600 px-4 py-2 rounded text-white text-sm hover:bg-indigo-700">
+                                    <Link 
+                                        href={`/dashboard/evaluator/reviews/${review.id}`}
+                                        className="bg-indigo-600 px-4 py-2 rounded text-white text-sm hover:bg-indigo-700 inline-block"
+                                    >
                                         Grade Now
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </li>

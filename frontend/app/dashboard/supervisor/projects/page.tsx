@@ -63,8 +63,9 @@ export default function SupervisorProjects() {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="mt-2 text-sm text-gray-500 sm:mt-0">
+                                <div className="mt-2 text-sm text-gray-500 sm:mt-0 flex gap-4 items-center">
                                     <p>Student: {project.student ? project.student.name : 'Unknown'}</p>
+                                    <a href={`/dashboard/supervisor/projects/${project.id}`} className="text-indigo-600 hover:text-indigo-900 font-medium">Manage &rarr;</a>
                                 </div>
                             </div>
                         </li>
