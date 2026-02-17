@@ -13,10 +13,15 @@ export default function Sidebar() {
             { href: '/dashboard/admin', label: 'Overview' },
             { href: '/dashboard/admin/users', label: 'Manage Users' },
             { href: '/dashboard/admin/projects', label: 'All Projects' },
+            { href: '/dashboard/admin/evaluations', label: 'Evaluations' },
+            { href: '/dashboard/admin/reports', label: 'Reports' },
+            { href: '/dashboard/admin/system', label: 'System Tools' },
         ],
         student: [
             { href: '/dashboard/student', label: 'My Project' },
             { href: '/dashboard/student/submissions', label: 'Submissions' },
+            { href: '/dashboard/student/reports', label: 'Reports' },
+            { href: '/dashboard/student/system', label: 'System Tools' },
         ],
         supervisor: [
             { href: '/dashboard/supervisor', label: 'Overview' },
