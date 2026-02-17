@@ -39,6 +39,7 @@ class ProjectController extends Controller
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'supervisor_id' => 'required|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -49,6 +50,7 @@ class ProjectController extends Controller
             'student_id' => $request->user()->id,
             'title' => $request->title,
             'description' => $request->description,
+            'supervisor_id' => $request->supervisor_id,
             'status' => 'pending',
         ]);
 

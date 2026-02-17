@@ -12,6 +12,43 @@ use App\Models\Submission;
 class SubmissionController extends Controller
 {
     /**
+     * Display all submissions for admin/evaluators.
+     */
+    public function allSubmissions(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->role === 'evaluator') {
+            $submissions = Submission::with(['project', 'student'])
+                ->whereDoesntHave('evaluations')
+                ->get();
+            return response()->json($submissions);
+        }
+
+        if ($user->role === 'supervisor') {
+             $submissions = Submission::whereHas('project', function($query) use ($user) {
+                // $query->where('supervisor_id', $user->id); // Assuming project has supervisor_id
+             })->with(['project', 'student'])->get();
+             // Note: Supervisor logic to filter by project is a bit complex if they evaluate submissions
+             // For now, let supervisors see submissions for their projects
+             // Correction: Submissions are usually for specific projects.
+             // If supervisor is evaluating, they might see their own students' submissions? Or others?
+             // Let's assume supervisors see submissions for their assigned projects.
+             // But allow evaluators to see all pending submissions.
+            $submissions = Submission::whereHas('project', function($query) use ($user) {
+                $query->where('supervisor_id', $user->id);
+            })->with(['project', 'student'])->get();
+            return response()->json($submissions);
+        }
+        
+        if ($user->role === 'admin') {
+            return response()->json(Submission::with(['project', 'student'])->get());
+        }
+
+        return response()->json([], 403);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Project $project)

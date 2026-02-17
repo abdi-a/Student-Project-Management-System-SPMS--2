@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Submission routes (nested under projects for creation, direct for viewing/updating if needed)
     Route::post('/projects/{project}/submissions', [SubmissionController::class, 'store']);
     Route::get('/projects/{project}/submissions', [SubmissionController::class, 'index']);
+    Route::get('/submissions', [SubmissionController::class, 'allSubmissions']); // For evaluators/admins
     Route::get('/submissions/{submission}', [SubmissionController::class, 'show']);
 
     // Evaluation routes

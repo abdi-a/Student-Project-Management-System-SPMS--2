@@ -1,49 +1,69 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
-
-const MOCK_SUBMISSIONS = [
-    { id: 1, title: 'Smart Farming IoT', status: 'Approved', date: '2023-09-15' },
-    { id: 2, title: 'Library System', status: 'Rejected', date: '2023-09-01' },
-];
+import api from '../../../lib/axios';
 
 export default function StudentSubmissions() {
+    const [submissions, setSubmissions] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSubmissions = async () => {
+             try {
+                 // First get the project
+                 const projectRes = await api.get('/projects');
+                 if (projectRes.data && projectRes.data.length > 0) {
+                     const projectId = projectRes.data[0].id;
+                     // Then get submissions for that project
+                     const subRes = await api.get(`/projects/${projectId}/submissions`);
+                     setSubmissions(subRes.data);
+                 }
+             } catch (error) {
+                 console.error(error);
+             } finally {
+                 setLoading(false);
+             }
+        };
+        fetchSubmissions();
+    }, []);
+
+    if (loading) return <DashboardLayout><div>Loading...</div></DashboardLayout>;
+
     return (
         <DashboardLayout>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">My Submissions</h1>
                 <Link href="/dashboard/student/proposal" className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                    New Proposal
+                    New Proposal / Submission
                 </Link>
             </div>
 
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
                 <ul className="divide-y divide-gray-200">
-                    {MOCK_SUBMISSIONS.map((sub) => (
+                    {submissions.map((sub) => (
                         <li key={sub.id} className="block hover:bg-gray-50">
                             <div className="px-4 py-4 sm:px-6">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-medium text-indigo-600 truncate">{sub.title}</p>
                                     <div className="ml-2 flex-shrink-0 flex">
-                                        <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            ${sub.status === 'Approved' ? 'bg-green-100 text-green-800' : 
-                                              sub.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                            {sub.status}
+                                        <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            {sub.type}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="mt-2 sm:flex sm:justify-between">
                                     <div className="sm:flex">
                                         <p className="flex items-center text-sm text-gray-500">
-                                            Submitted on {sub.date}
+                                            Submitted on {new Date(sub.created_at).toLocaleDateString()}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </li>
                     ))}
-                    {MOCK_SUBMISSIONS.length === 0 && (
+                    {submissions.length === 0 && (
                         <li className="px-4 py-8 text-center text-gray-500">
                             No submissions found. Start by creating a new proposal.
                         </li>

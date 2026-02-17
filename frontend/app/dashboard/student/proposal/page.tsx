@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../../components/layout/DashboardLayout';
 import api from '../../../lib/axios';
 import { useRouter } from 'next/navigation';
@@ -10,14 +10,31 @@ export default function SubmitProposal() {
     const [description, setDescription] = useState('');
     const [supervisorId, setSupervisorId] = useState('');
     const [loading, setLoading] = useState(false);
+    const [supervisors, setSupervisors] = useState<any[]>([]);
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchSupervisors = async () => {
+            try {
+                const response = await api.get('/users?role=supervisor');
+                setSupervisors(response.data);
+            } catch (error) {
+                console.error("Failed to fetch supervisors", error);
+            }
+        };
+        fetchSupervisors();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            // await api.post('/proposals', { title, description, supervisor_id: supervisorId });
-            alert('Proposal submitted successfully! (Mock)');
+            await api.post('/projects', { 
+                title, 
+                description, 
+                supervisor_id: supervisorId 
+            });
+            alert('Proposal submitted successfully!');
             router.push('/dashboard/student');
         } catch (error) {
             console.error(error);
@@ -58,10 +75,12 @@ export default function SubmitProposal() {
                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             value={supervisorId}
                             onChange={(e) => setSupervisorId(e.target.value)}
+                            required
                         >
                             <option value="">Select a Supervisor</option>
-                            <option value="1">Dr. Smith</option>
-                            <option value="2">Prof. Johnson</option>
+                            {supervisors.map(s => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
                         </select>
                     </div>
                     <button 
