@@ -26,10 +26,14 @@ export default function Sidebar() {
         supervisor: [
             { href: '/dashboard/supervisor', label: 'Overview' },
             { href: '/dashboard/supervisor/projects', label: 'Assigned Projects' },
+            { href: '/dashboard/supervisor/reports', label: 'Reports' },
+            { href: '/dashboard/supervisor/system', label: 'System Tools' },
         ],
         evaluator: [
             { href: '/dashboard/evaluator', label: 'Overview' },
             { href: '/dashboard/evaluator/reviews', label: 'Pending Reviews' },
+            { href: '/dashboard/evaluator/reports', label: 'History & Reports' },
+            { href: '/dashboard/evaluator/system', label: 'System Tools' },
         ],
     };
 
